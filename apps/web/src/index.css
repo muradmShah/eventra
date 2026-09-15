@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  overflow-x: clip;
+}
+
+/*
+  ---break---
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 14%;
+    --primary: 222 47% 14%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 14%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 222 12% 42%;
+    --accent: 214 72% 44%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 72% 48%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 222 47% 14%;
+    --radius: 0.25rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 222 47% 14%;
+    --sidebar-primary: 222 47% 14%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 222 47% 14%;
+    --sidebar-border: 220 13% 88%;
+    --sidebar-ring: 214 72% 44%;
+  }
+  .dark {
+    --background: 222 47% 10%;
+    --foreground: 0 0% 98%;
+    --card: 222 40% 13%;
+    --card-foreground: 0 0% 98%;
+    --popover: 222 40% 13%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 222 47% 14%;
+    --secondary: 222 30% 18%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 222 30% 18%;
+    --muted-foreground: 220 12% 65%;
+    --accent: 214 72% 55%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 222 25% 22%;
+    --input: 222 25% 22%;
+    --ring: 214 72% 55%;
+    --sidebar-background: 222 40% 12%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 214 72% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 30% 18%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 222 25% 22%;
+    --sidebar-ring: 214 72% 55%;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  }
+  .font-code {
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  }
+  /* Tactile cut-paper hard shadows */
+  .paper {
+    box-shadow: 10px 10px 0 0 hsl(var(--primary));
+  }
+  .paper-sm {
+    box-shadow: 6px 6px 0 0 hsl(var(--primary));
+  }
+  .paper-accent {
+    box-shadow: 10px 10px 0 0 hsl(var(--accent));
+  }
+  .paper-white {
+    box-shadow: 10px 10px 0 0 hsl(0 0% 100% / 0.16);
+  }
+  /* Technical blueprint grid for dark sections */
+  .bg-blueprint {
+    background-image:
+      linear-gradient(hsl(0 0% 100% / 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(0 0% 100% / 0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .bg-blueprint-light {
+    background-image:
+      linear-gradient(hsl(222 47% 14% / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(222 47% 14% / 0.05) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  /* Cinematic Ken Burns motion for hero "video" slides */
+  @keyframes kenburns {
+    0% {
+      transform: scale(1.08) translate3d(0, 0, 0);
+    }
+    100% {
+      transform: scale(1.22) translate3d(-2.5%, -2%, 0);
+    }
+  }
+  .kenburns {
+    animation: kenburns 7s ease-out forwards;
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kenburns {
+      animation: none;
+    }
+  }
+}

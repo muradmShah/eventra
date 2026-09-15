@@ -28,7 +28,7 @@ import { useAuth } from '@/contexts/AuthContext';
 export default function EventDetailsPage() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { isAuthed, isAdmin, logout } = useAuth();
+    const { user, isAuthed, isAdmin, logout } = useAuth();
     const [event, setEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -64,30 +64,61 @@ export default function EventDetailsPage() {
         new Date(event.startDate).getTime() > Date.now();
 
     const handleRegister = async () => {
-        if (!isAuthed) {
+    if (!isAuthed) {
+        navigate('/login');
+        return;
+    }
+
+    setRegError('');
+    setRegistering(true);
+
+    try {
+        // Step 1: Register attendee in PocketBase
+        const registration = await registerForEvent(id, 1);
+
+        setSuccess(true);
+        setExisting({ status: 'active' });
+
+        // Step 2: Send registration details to n8n
+        try {
+            await fetch(
+                'https://abeermurad.app.n8n.cloud/webhook/eventra-registration',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        attendeeName: user?.name || user?.username || 'Attendee',
+                        attendeeEmail: user?.email,
+                        eventTitle: event?.title,
+                        eventDate: event?.startDate,
+                        eventTime: event?.startTime || event?.time,
+                        venue: event?.venue || event?.location,
+                        tickets: 1,
+                        registrationStatus: 'active',
+                        registrationId: registration?.id,
+                    }),
+                }
+            );
+        } catch (webhookError) {
+            console.error('n8n webhook error:', webhookError);
+        }
+
+    } catch (err) {
+        const msg = err?.response?.message || err?.message || '';
+
+        if (msg.includes('signed in')) {
+            logout();
             navigate('/login');
             return;
         }
-        setRegError('');
-        setRegistering(true);
-        try {
-            await registerForEvent(id, 1);
-            setSuccess(true);
-            setExisting({ status: 'active' });
-        } catch (err) {
-            const msg = err?.response?.message || err?.message || '';
-            // If the token went stale mid-session, force a clean re-auth instead
-            // of showing a confusing "must be signed in" error.
-            if (msg.includes('signed in')) {
-                logout();
-                navigate('/login');
-                return;
-            }
-            setRegError(msg || 'Unable to register. Please try again.');
-        } finally {
-            setRegistering(false);
-        }
-    };
+
+        setRegError(msg || 'Unable to register. Please try again.');
+    } finally {
+        setRegistering(false);
+    }
+};
 
     if (loading) {
         return (
